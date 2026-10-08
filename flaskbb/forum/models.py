@@ -1156,6 +1156,9 @@ class Topic(HideableMixin, BaseModel):
         )
         return list(db.session.execute(stmt).scalars())
 
+    def merge(self, topic: "Topic") -> "Topic":
+        raise NotImplementedError()
+
 
 @make_comparable
 class Forum(BaseModel):

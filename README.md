@@ -1,3 +1,32 @@
+
+### Task
+
+## Merging Topics.
+
+A friend using the FlaskBB forum has been irritated lately. People using his forum keeps creating new identical topics. 
+He has a proposed solution but does not have the knowledge to implement the feature himself.
+He wants you to implement a method of merging two topics, with a single requirement all posts shall be preserved.
+As the helpfull developer you are you offer him help, but you also want to create a Pull request to FlaskBB such that other users can use this new feature.
+The simple requirements your friend gave you is not enough, the feature has to have sensible functionality.
+Implement the feature all decisions should be defendable to the Github moderators.  
+
+To make the task simpler the front-end is implemented, and the function merge is defined on Topic.
+
+* Implement the function merge under forum/models.py
+
+
+## Testing and the definition of done
+
+The feature is done when the test is passing *and* you feel confident about other aspects of the implementation.
+
+run 'make test' in root 
+
+
+
+
+
+###
+
 <p align="center">
   <a href="https://flaskbb.com">
     <picture>

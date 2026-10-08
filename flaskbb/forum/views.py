@@ -234,12 +234,17 @@ class ViewTopic(MethodView):
         if len(posts.items) == 0:
             abort(404)
 
+        merge_candidates: list[Topic] = []
+        if Permission(IsAtleastModeratorInForum(forum=topic.forum)):
+            merge_candidates = _merge_candidates(topic)
+
         return render_template(
             "forum/topic.html",
             topic=topic,
             posts=posts,
             last_seen=time_diff(),
             form=self.form(),
+            merge_candidates=merge_candidates,
         )
 
     @allows.requires(
@@ -807,6 +812,54 @@ class TrivializeTopic(MethodView):
         return redirect_or_reload(redirect_url(topic.url))
 
 
+def _merge_candidates(topic: Topic) -> list[Topic]:
+    """The topics ``topic`` can be merged with from its topic page: the other
+    visible topics of its forum, most recently active first.
+    """
+    return list(
+        db.session.scalars(
+            sa.select(Topic)
+            .where(
+                Topic.forum_id == topic.forum_id,
+                Topic.id != topic.id,
+                Topic.hidden.is_(False),
+            )
+            .order_by(Topic.last_updated.desc())
+        )
+    )
+
+class MergeTopic(MethodView):
+    decorators = [
+        login_required,
+        allows.requires(
+            IsAtleastModeratorInForum(),
+            on_fail=FlashAndRedirect(
+                message=_("You are not allowed to merge this topic"),
+                level="danger",
+                endpoint=lambda *a, **k: redirect_url(_topic_url()),
+            ),
+        ),
+    ]
+
+    def post(self, topic_id: int, slug: str | None = None):
+        topic = first_or_404(sa.select(Topic).where(Topic.id == topic_id), True)
+
+        other_topic_id = request.form.get("topic", type=int)
+        if not other_topic_id:
+            flash(_("Please choose a topic to merge this topic with."), "info")
+            return redirect(topic.url)
+
+        other_topic = first_or_404(sa.select(Topic).where(Topic.id == other_topic_id), True)
+
+        if not Permission(IsAtleastModeratorInForum(forum=other_topic.forum)):
+            flash(_("You do not have the permissions to merge these topics."), "danger")
+            return redirect(topic.url)
+
+        merged_topic = topic.merge(other_topic)
+        flash(_("Topics merged."), "success")
+        return redirect(merged_topic.url)
+
+
 class DeletePost(MethodView):
     decorators = [
         login_required,
@@ -1148,6 +1201,11 @@ def flaskbb_load_blueprints(app: FlaskBB):
         forum,
         routes=["/topic/<int:topic_id>/lock", "/topic/<int:topic_id>-<slug>/lock"],
         view_func=LockTopic.as_view("lock_topic"),
+    )
+    register_view(
+        forum,
+        routes=["/topic/<int:topic_id>/merge", "/topic/<int:topic_id>-<slug>/merge"],
+        view_func=MergeTopic.as_view("merge_topic"),
     )
     register_view(
         forum,

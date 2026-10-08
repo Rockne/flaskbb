@@ -358,6 +358,34 @@
 
         <div class="pt-2" id="topic-footer">{% include theme("forum/topic_controls.html") %}</div>
 
+        {% if merge_candidates %}
+            {# a plain form: merging leaves this page for the merged topic #}
+            <div class="card mb-3" id="topic-merge">
+                <div class="card-header">{% trans %}Merge Topic{% endtrans %}</div>
+                <div class="card-body">
+                    <form method="post"
+                          action="{{ url_for('forum.merge_topic', topic_id=topic.id, slug=topic.slug) }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                        <label class="form-label" for="merge-topic">{% trans %}Merge this topic with{% endtrans %}</label>
+                        <div class="input-group">
+                            <select class="form-select" id="merge-topic" name="topic" required>
+                                <option selected value="">{% trans %}Select a topic...{% endtrans %}</option>
+                                {% for candidate in merge_candidates %}
+                                    <option value="{{ candidate.id }}">{{ candidate.title }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="button"
+                                    class="btn btn-outline-dark"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#confirmModal">
+                                <span class="fas fa-code-merge fa-fw"></span> {% trans %}Merge{% endtrans %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+
         {% if form %}
             <form class="form" method="post">
                 {{ form.hidden_tag() }}

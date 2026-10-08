@@ -49,6 +49,15 @@ def topic(forum, user):
 
 
 @pytest.fixture
+def other_topic(forum, user):
+    """A second topic by a normal user in the same forum as ``topic``, with
+    two replies of its own."""
+    topic = Topic(title="Test Topic Other")
+    post = Post(content="Test Content Other")
+    return topic.save(forum=forum, user=user, post=post)
+
+
+@pytest.fixture
 def topic_moderator(forum, moderator_user):
     """A topic by a user with moderator permissions."""
     topic = Topic(title="Test Topic Moderator")
