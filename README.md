@@ -1,31 +1,41 @@
 
+# Tasks
+
+## 1: Merging Topics.
+
+### Description
+
+A friend using the FlaskBB forum has been irritated lately, users on his website keeps creating new identical topics.   
+He has a proposed solution: merging topics, but does not know how to implement it.  
+He has asked you to implement the feature with a few requirements.  
+On a merge a new third topic shall be created and all posts shall be preserved from both topics.  
+As the helpfull developer you are you offer him help, in addition to that you want to create a pull request to FlaskBB such that other users can use this new feature.  
+
+Before starting the implementation you realize the simple requirements is not enough, you ask him again for a more complete set of requirements but he says he does not care about the details.
 ### Task
 
-## Merging Topics.
+To simplify the task UI for merging is already implemented, a function **merge_topics** is defined under Forum.
 
-A friend using the FlaskBB forum has been irritated lately. People using his forum keeps creating new identical topics. 
-He has a proposed solution but does not have the knowledge to implement the feature himself.
-He wants you to implement a method of merging two topics, with a single requirement all posts shall be preserved.
-As the helpfull developer you are you offer him help, but you also want to create a Pull request to FlaskBB such that other users can use this new feature.
-The simple requirements your friend gave you is not enough, the feature has to have sensible functionality.
-Implement the feature all decisions should be defendable to the Github moderators.  
+* Implement the function **merge_topics** defined under the class **Forum**.  
 
-To make the task simpler the front-end is implemented, and the function merge is defined on Topic.
+You have finished the task when all tests pass and all aspect of the implementation are defendable to a reviewer. 
 
-* Implement the function merge under forum/models.py
-
-
-## Testing and the definition of done
-
-The feature is done when the test is passing *and* you feel confident about other aspects of the implementation.
-
-run 'make test' in root 
+**No changes to the ui are neccesarry** changes here will not be evaluated.  
+You are free to add more tests, but this is not a part of the evaluation.
 
 
 
+## Testing
+
+to run all tests run ```make test``` in root.  
+To just run the tests for merge run ```make test_merge```
 
 
-###
+UI is implemented for merging topic, login as an admin and select a topic, you should be able to select another topic, after clicking merge the returned topic from merge is opened.
+
+
+
+---
 
 <p align="center">
   <a href="https://flaskbb.com">

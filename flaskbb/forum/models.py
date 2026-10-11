@@ -1467,6 +1467,9 @@ class Forum(BaseModel):
             status = topic.move(self)
         return status
 
+    def merge_topics(self, topic: Topic, other_topic: Topic) -> Topic:
+        raise NotImplementedError()
+
     # Classmethods
     @classmethod
     def get_forum(cls, forum_id: int, user: "User"):

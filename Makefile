@@ -18,6 +18,8 @@ clean: ## Remove unwanted stuff such as __pycache__, etc...
 test: ## Runs the testsuite
 	uv run pytest
 
+test_merge: ## Runs test-merge
+	uv run pytest tests\unit\forum\test_topic_merge.py
 run: ## Runs the development server with the development config
 	WERKZEUG_DEBUG_PIN=off uv run flaskbb run --debugger --reload --debug
 

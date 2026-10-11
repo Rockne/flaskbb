@@ -855,7 +855,7 @@ class MergeTopic(MethodView):
             flash(_("You do not have the permissions to merge these topics."), "danger")
             return redirect(topic.url)
 
-        merged_topic = topic.merge(other_topic)
+        merged_topic = topic.forum.merge_topics(topic, other_topic)
         flash(_("Topics merged."), "success")
         return redirect(merged_topic.url)
 
